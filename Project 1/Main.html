@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralFlow - AI Innovation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px rgba(0, 245, 255, 0.5));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #00f5ff;
+            transform: translateY(-2px);
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #b0b0b0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.3);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 245, 255, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.2);
+        }
+
+        .feature-card:active {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00f5ff;
+        }
+
+        .feature-button {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            color: #00f5ff;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .feature-button:hover {
+            background: rgba(0, 245, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* AI Showcase Section */
+        .ai-showcase {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .ai-showcase h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ai-demo {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .ai-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: #00f5ff;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+
+        .ai-response {
+            background: rgba(0, 245, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .typing-animation {
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: #00f5ff;
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Interactive Dashboard */
+        .dashboard {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .dashboard h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .metric:hover::before {
+            left: 100%;
+        }
+
+        .metric:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .metric:active {
+            transform: scale(1.02);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            margin-top: 0.5rem;
+        }
+
+        .metric-trend {
+            font-size: 0.8rem;
+            color: #00ff88;
+            margin-top: 0.5rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ffff00, #00f5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.15);
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff00ff, #ffff00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: #00f5ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-role {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            padding: 5rem 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .newsletter h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #00f5ff;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+
+        .newsletter-button {
+            background: linear-gradient(45deg, #ff00ff, #ffff00);
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 0, 255, 0.3);
+        }
+
+        .newsletter-button:active {
+            transform: translateY(0px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            color: #00f5ff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #b0b0b0;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: #00f5ff;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            transform: translateY(-3px);
+        }
+
+        .social-links a:active {
+            transform: translateY(-1px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #00f5ff;
+            transform: scale(1.1);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                min-width: auto;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 245, 255, 0.3);
+            border-top: 3px solid #00f5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Welcome to the future of AI! 🚀
+    </div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="showNotification('NeuralFlow - Pioneering AI Innovation!')">NeuralFlow</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="smoothScrollTo('home')">Home</a></li>
+                <li><a href="#features" onclick="smoothScrollTo('features')">Features</a></li>
+                <li><a href="#ai-showcase" onclick="smoothScrollTo('ai-showcase')">AI Demo</a></li>
+                <li><a href="#dashboard" onclick="smoothScrollTo('dashboard')">Analytics</a></li>
+                <li><a href="#testimonials" onclick="smoothScrollTo('testimonials')">Reviews</a></li>
+                <li><a href="#contact" onclick="smoothScrollTo('contact')">Contact</a></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>The Future is Neural</h1>
+            <p>Revolutionizing artificial intelligence with cutting-edge neural networks and machine learning algorithms. Experience the next generation of AI-powered solutions that adapt, learn, and evolve in real-time.</p>
+            <div class="hero-buttons">
+                <button class="cta-button ripple" onclick="startAIDemo()">Start AI Demo</button>
+                <button class="cta-button cta-secondary ripple" onclick="showModal('pricing')">View Pricing</button>
+                <button class="cta-button cta-secondary ripple" onclick="downloadWhitepaper()">Download Whitepaper</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Revolutionary AI Capabilities</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #b0b0b0; margin-bottom: 3rem;">
+                Discover how our advanced neural networks are transforming industries worldwide
+            </p>
+            <div class="features-grid">
+                <div class="feature-card ripple" onclick="showFeatureDemo('neural')">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Advanced Neural Processing</h3>
+                    <p>Our proprietary neural architecture processes information 1000x faster than traditional systems, enabling real-time decision making with unprecedented accuracy.</p>
+                    <button class="feature-button" onclick="event.stopPropagation(); testSecurity()">Security Scan →</button>
+                </div>
+                <div class="feature-card ripple" onclick="showFeatureDemo('scale')">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Global Auto-Scale</h3>
+                    <p>Intelligent infrastructure that automatically scales across 50+ data centers worldwide, ensuring 99.99% uptime and optimal performance globally.</p>
+                    <button class="feature-button" onclick="event.stopPropagation(); showGlobalMap()">View Global Network →</button>
+                </div>
+                <div class="feature-card ripple" onclick="showFeatureDemo('analytics')">
+                    <div class="feature-icon">📊</div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Machine learning algorithms that predict market trends, user behavior, and system performance with 97.8% accuracy using deep learning models.</p>
+                    <button class="feature-button" onclick="event.stopPropagation(); generatePrediction()">Generate Prediction →</button>
+                </div>
+                <div class="feature-card ripple" onclick="showFeatureDemo('integration')">
+                    <div class="feature-icon">🚀</div>
+                    <h3>One-Click Integration</h3>
+                    <p>Seamless API integration with 500+ platforms including AWS, Google Cloud, Azure, and custom enterprise systems with plug-and-play simplicity.</p>
+                    <button class="feature-button" onclick="event.stopPropagation(); showIntegrations()">View Integrations →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Showcase Section -->
+    <section class="ai-showcase" id="ai-showcase">
+        <div class="container">
+            <h2>Interactive AI Demo</h2>
+            <p style="font-size: 1.2rem; color: #b0b0b0; margin-bottom: 3rem;">
+                Experience our AI in action - ask anything and watch it think!
+            </p>
+            <div class="ai-demo">
+                <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything about AI, technology, or the future..." />
+                <button class="cta-button ripple" onclick="processAIQuery()" style="margin: 1rem 0;">Ask AI Assistant</button>
+                <div class="ai-response" id="aiResponse">
+                    <p style="color: #888;">AI Assistant ready... Type your question above!</p>
+                </div>
+            </div>
+            <div style="margin-top: 3rem;">
+                <button class="cta-button cta-secondary ripple" onclick="generateRandomDemo()">Generate Random Demo</button>
+                <button class="cta-button cta-secondary ripple" onclick="showAICapabilities()">View AI Capabilities</button>
+                <button class="cta-button cta-secondary ripple" onclick="scheduleAIConsultation()">Schedule AI Consultation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Dashboard -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <h2>Live Analytics Dashboard</h2>
+            <p style="font-size: 1.2rem; color: #b0b0b0; margin-bottom: 3rem;">
+                Real-time insights from our global AI network
+            </p>
+            <div class="metrics-container">
+                <div class="metric ripple" onclick="showMetricDetails('users')">
+                    <div class="metric-value" id="users">0</div>
+                    <div class="metric-label">Active Users</div>
+                    <div class="metric-trend" id="usersTrend">↗ +12.5% this hour</div>
+                </div>
+                <div class="metric ripple" onclick="showMetricDetails('requests')">
+                    <div class="metric-value" id="requests">0</div>
+                    <div class="metric-label">AI Requests/sec</div>
+                    <div class="metric-trend" id="requestsTrend">↗ +8.2% from yesterday</div>
+                </div>
+                <div class="metric ripple" onclick="showMetricDetails('accuracy')">
+                    <div class="metric-value" id="accuracy">0%</div>
+                    <div class="metric-label">ML Accuracy</div>
+                    <div class="metric-trend" id="accuracyTrend">↗ +0.3% this week</div>
+                </div>
+                <div class="metric ripple" onclick="showMetricDetails('uptime')">
+                    <div class="metric-value" id="uptime">0%</div>
+                    <div class="metric-label">Global Uptime</div>
+                    <div class="metric-trend" id="uptimeTrend">💎 Perfect record</div>
+                </div>
+                <div class="metric ripple" onclick="showMetricDetails('models')">
+                    <div class="metric-value" id="models">847</div>
+                    <div class="metric-label">AI Models Deployed</div>
+                    <div class="metric-trend" id="modelsTrend">↗ +23 this week</div>
+                </div>
+                <div class="metric ripple" onclick="showMetricDetails('countries')">
+                    <div class="metric-value" id="countries">156</div>
+                    <div class="metric-label">Countries Served</div>
+                    <div class="metric-trend" id="countriesTrend">🌍 Global coverage</div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem;">
+                <button class="cta-button ripple" onclick="generateReport()">Generate Full Report</button>
+                <button class="cta-button cta-secondary ripple" onclick="exportData()">Export Data</button>
+                <button class="cta-button cta-secondary ripple" onclick="setUpAlerts()">Set Up Alerts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>What Industry Leaders Say</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #b0b0b0; margin-bottom: 3rem;">
+                Trusted by Fortune 500 companies and innovative startups worldwide
+            </p>
+            <div class="testimonials-grid">
+                <div class="testimonial ripple" onclick="showFullTestimonial('sarah')">
+                    <div class="testimonial-avatar">👩‍💼</div>
+                    <div class="testimonial-name">Dr. Sarah Chen</div>
+                    <div class="testimonial-role">Chief AI Officer, TechCorp</div>
+                    <p>"NeuralFlow transformed our entire data pipeline. We're now processing 10x more data with 50% less computational cost. The ROI has been incredible."</p>
+                </div>
+                <div class="testimonial ripple" onclick="showFullTestimonial('marcus')">
+                    <div class="testimonial-avatar">👨‍🔬</div>
+                    <div class="testimonial-name">Marcus Rodriguez</div>
+                    <div class="testimonial-role">Head of Innovation, FinanceFlow</div>
+                    <p>"The predictive accuracy is mind-blowing. Our trading algorithms improved by 300% within the first month. This is the future of financial technology."</p>
+                </div>
+                <div class="testimonial ripple" onclick="showFullTestimonial('emma')">
+                    <div class="testimonial-avatar">👩‍🎓</div>
+                    <div class="testimonial-name">Prof. Emma Watson</div>
+                    <div class="testimonial-role">Director of AI Research, MIT</div>
+                    <p>"From an academic perspective, NeuralFlow's architecture is revolutionary. We're using it for breakthrough research in quantum computing and neural interfaces."</p>
+                </div>
+                <div class="testimonial ripple" onclick="showFullTestimonial('david')">
+                    <div class="testimonial-avatar">👨‍💻</div>
+                    <div class="testimonial-name">David Kim</div>
+                    <div class="testimonial-role">CTO, StartupUnicorn</div>
+                    <p>"As a startup, we needed enterprise-level AI without the enterprise cost. NeuralFlow scaled with us from day one to IPO. Absolutely game-changing."</p>
+                </div>
+                <div class="testimonial ripple" onclick="showFullTestimonial('lisa')">
+                    <div class="testimonial-avatar">👩‍⚕️</div>
+                    <div class="testimonial-name">Dr. Lisa Park</div>
+                    <div class="testimonial-role">Medical AI Director, HealthTech</div>
+                    <p>"In healthcare, accuracy is everything. NeuralFlow's diagnostic AI has improved patient outcomes by 40% while reducing false positives dramatically."</p>
+                </div>
+                <div class="testimonial ripple" onclick="showFullTestimonial('alex')">
+                    <div class="testimonial-avatar">👨‍🚀</div>
+                    <div class="testimonial-name">Alex Thompson</div>
+                    <div class="testimonial-role">VP Engineering, SpaceVenture</div>
+                    <p>"We're literally using NeuralFlow to navigate spacecraft. The real-time processing capabilities are out of this world - pun intended!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter" id="newsletter">
+        <div class="container">
+            <h2>Stay Ahead of the AI Revolution</h2>
+            <p style="font-size: 1.2rem; color: #b0b0b0; margin-bottom: 2rem;">
+                Get exclusive insights, early access to new features, and AI industry reports
+            </p>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" class="newsletter-input" placeholder="Enter your email for AI updates" required />
+                <button type="submit" class="newsletter-button ripple">Join 50K+ AI Enthusiasts</button>
+            </form>
+            <div style="margin-top: 2rem;">
+                <button class="cta-button cta-secondary ripple" onclick="downloadAIGuide()">Free AI Strategy Guide</button>
+                <button class="cta-button cta-secondary ripple" onclick="joinWebinar()">Join Live Webinar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <a onclick="showNotification('AI Platform launching soon!')">AI Platform</a>
+                    <a onclick="showNotification('Neural Networks available now!')">Neural Networks</a>
+                    <a onclick="showNotification('Enterprise Solutions coming Q2!')">Enterprise Solutions</a>
+                    <a onclick="showNotification('Developer Tools in beta!')">Developer Tools</a>
+                    <a onclick="showNotification('API Documentation updated!')">API Documentation</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <a onclick="showAboutModal()">About Us</a>
+                    <a onclick="showCareersModal()">Careers (We're Hiring!)</a>
+                    <a onclick="showPressModal()">Press & Media</a>
+                    <a onclick="showInvestorModal()">Investor Relations</a>
+                    <a onclick="showPartnersModal()">Partners</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <a onclick="showDocumentation()">Documentation</a>
+                    <a onclick="showCommunityForum()">Community Forum</a>
+                    <a onclick="showBlogModal()">AI Research Blog</a>
+                    <a onclick="showCaseStudiesModal()">Case Studies</a>
+                    <a onclick="showWhitepapersModal()">Research Papers</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a onclick="openHelpCenter()">Help Center</a>
+                    <a onclick="startLiveChat()">Live Chat Support</a>
+                    <a onclick="showContactForm()">Contact Sales</a>
+                    <a onclick="showSystemStatus()">System Status</a>
+                    <a onclick="showPrivacyModal()">Privacy Policy</a>
+                </div>
+            </div>
+            
+            <h3>Ready to Transform Your Business with AI?</h3>
+            <p>Join thousands of innovators already using NeuralFlow to build the next generation of intelligent applications.</p>
+            <div style="margin: 2rem 0;">
+                <button class="cta-button ripple" onclick="startFreeTrial()">Start Free Trial</button>
+                <button class="cta-button cta-secondary ripple" onclick="requestDemo()">Request Enterprise Demo</button>
+            </div>
+            
+            <div class="social-links">
+                <a onclick="showNotification('Opening LinkedIn profile!')" title="LinkedIn">💼</a>
+                <a onclick="showNotification('Opening Twitter profile!')" title="Twitter">🐦</a>
+                <a onclick="showNotification('Opening GitHub repository!')" title="GitHub">💻</a>
+                <a onclick="showNotification('Opening YouTube channel!')" title="YouTube">📺</a>
+                <a onclick="showNotification('Send us an email!')" title="Email">📧</a>
+                <a onclick="showNotification('Opening Discord community!')" title="Discord">💬</a>
+            </div>
+            <p style="margin-top: 2rem; color: #666;">&copy; 2025 NeuralFlow AI Technologies. Pioneering the AI Revolution. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody">
+                <h2>Modal Content</h2>
+                <p>This is a dynamic modal that changes based on your interactions!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let aiResponses = [
+            "Based on current trends, AI will revolutionize every industry within the next decade. Neural networks are becoming more efficient and accessible.",
+            "The future of technology lies in the convergence of AI, quantum computing, and biotechnology. We're entering an era of unprecedented innovation.",
+            "Machine learning algorithms are now capable of creative tasks, from composing music to writing code. The possibilities are limitless.",
+            "Artificial General Intelligence (AGI) is projected to emerge within 15-20 years, fundamentally changing how we work and live.",
+            "Neural interfaces will soon allow direct brain-computer interaction, enabling thought-controlled devices and enhanced human capabilities."
+        ];
+
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    showNotification('Welcome to NeuralFlow! 🚀');
+                }, 500);
+            }, 1500);
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinks = document.getElementById('navLinks');
+            mobileMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Modal functions
+        function showModal(type) {
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+            
+            let content = '';
+            switch(type) {
+                case 'pricing':
+                    content = `
+                        <h2>🚀 Pricing Plans</h2>
+                        <div style="display: grid; gap: 1rem; margin: 2rem 0;">
+                            <div style="padding: 1rem; background: rgba(0,245,255,0.1); border-radius: 10px;">
+                                <h3>Starter - $29/month</h3>
+                                <p>Perfect for small projects and experimentation</p>
+                                <button class="cta-button" onclick="showNotification('Starter plan selected!')">Choose Plan</button>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(255,0,255,0.1); border-radius: 10px;">
+                                <h3>Professional - $99/month</h3>
+                                <p>Ideal for growing businesses and advanced features</p>
+                                <button class="cta-button" onclick="showNotification('Professional plan selected!')">Choose Plan</button>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(255,255,0,0.1); border-radius: 10px;">
+                                <h3>Enterprise - Custom</h3>
+                                <p>Tailored solutions for large organizations</p>
+                                <button class="cta-button" onclick="showNotification('Enterprise consultation requested!')">Contact Sales</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                default:
+                    content = '<h2>Information</h2><p>More details coming soon!</p>';
+            }
+            
+            modalBody.innerHTML = content;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // AI Demo functions
+        function startAIDemo() {
+            smoothScrollTo('ai-showcase');
+            document.getElementById('aiInput').focus();
+            showNotification('AI Demo ready! Ask me anything 🤖');
+        }
+
+        function processAIQuery() {
+            const input = document.getElementById('aiInput');
+            const response = document.getElementById('aiResponse');
+            const query = input.value.trim();
+            
+            if (!query) {
+                showNotification('Please enter a question first!');
+                return;
+            }
+            
+            // Show typing animation
+            response.innerHTML = '<div class="typing-animation"></div><span style="margin-left: 10px;">AI is thinking...</span>';
+            
+            setTimeout(() => {
+                const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                response.innerHTML = `
+                    <div style="text-align: left;">
+                        <strong>🤖 AI Assistant:</strong><br>
+                        ${randomResponse}
+                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #888;">
+                            Response generated in 0.${Math.floor(Math.random() * 9) + 1}s
+                        </div>
+                    </div>
+                `;
+                input.value = '';
+            }, 2000);
+        }
+
+        function generateRandomDemo() {
+            const demoQueries = [
+                "What will AI look like in 2030?",
+                "How does machine learning work?",
+                "Can AI be creative?",
+                "What are neural networks?",
+                "Will AI replace human jobs?"
+            ];
+            const randomQuery = demoQueries[Math.floor(Math.random() * demoQueries.length)];
+            document.getElementById('aiInput').value = randomQuery;
+            processAIQuery();
+        }
+
+        // Feature demonstrations
+        function showFeatureDemo(feature) {
+            const demos = {
+                'neural': 'Neural processing demo: Analyzing 1M+ data points in real-time... 🧠',
+                'speed': 'Speed test initiated: Processing 10GB data in 0.03 seconds! ⚡',
+                'security': 'Security scan complete: 256-bit encryption verified ✅ 🔒',
+                'scale': 'Auto-scaling activated across 12 regions simultaneously 🌐',
+                'analytics': 'Prediction generated: 94.7% accuracy on next quarter trends 📊',
+                'integration': 'Integration test: Successfully connected to 47 platforms 🚀'
+            };
+            showNotification(demos[feature] || 'Feature demo loading...');
+        }
+
+        function runSpeedTest() {
+            showNotification('Speed test running...');
+            setTimeout(() => showNotification('⚡ Result: 0.0023ms response time!'), 1500);
+        }
+
+        function testSecurity() {
+            showNotification('Security scan initiated...');
+            setTimeout(() => showNotification('🔒 All systems secure! 256-bit encryption active.'), 2000);
+        }
+
+        // Dashboard interactions
+        function showMetricDetails(metric) {
+            const details = {
+                'users': 'Active users distributed across 156 countries, with 34% growth this month',
+                'requests': 'AI requests processed with 99.97% success rate and sub-millisecond latency',
+                'accuracy': 'Machine learning accuracy improved through continuous model training',
+                'uptime': 'Global uptime maintained through redundant infrastructure and auto-failover',
+                'models': 'AI models covering computer vision, NLP, predictive analytics, and more',
+                'countries': 'Global presence with local data centers ensuring optimal performance'
+            };
+            showNotification(details[metric] || 'Metric details loading...');
+        }
+
+        // Utility functions
+        function smoothScrollTo(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function downloadWhitepaper() {
+            showNotification('📄 AI Strategy Whitepaper downloading...');
+            setTimeout(() => showNotification('Download complete! Check your downloads folder.'), 2000);
+        }
+
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input').value;
+            showNotification(`🎉 Welcome aboard! Confirmation sent to ${email}`);
+            event.target.reset();
+        }
+
+        // Animated background particles
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                bgAnimation.appendChild(particle);
+            }
+        }
+
+        // Dynamic metrics counter
+        function animateMetrics() {
+            const metrics = [
+                { id: 'users', target: 12847, suffix: 'K' },
+                { id: 'requests', target: 2934, suffix: '' },
+                { id: 'accuracy', target: 97.8, suffix: '%' },
+                { id: 'uptime', target: 99.9, suffix: '%' }
+            ];
+
+            metrics.forEach(metric => {
+                const element = document.getElementById(metric.id);
+                let current = 0;
+                const increment = metric.target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= metric.target) {
+                        current = metric.target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current) + metric.suffix;
+                }, 50);
+            });
+        }
+
+        // Real-time metric updates
+        function updateMetrics() {
+            setInterval(() => {
+                const users = document.getElementById('users');
+                const requests = document.getElementById('requests');
+                const accuracy = document.getElementById('accuracy');
+                
+                if (users) {
+                    const currentUsers = parseInt(users.textContent);
+                    const newUsers = currentUsers + Math.floor(Math.random() * 10 - 5);
+                    users.textContent = Math.max(0, newUsers) + 'K';
+                }
+                
+                if (requests) {
+                    const newRequests = Math.floor(Math.random() * 500 + 2500);
+                    requests.textContent = newRequests;
+                }
+                
+                if (accuracy) {
+                    const newAccuracy = (97.5 + Math.random() * 0.5).toFixed(1);
+                    accuracy.textContent = newAccuracy + '%';
+                }
+            }, 3000);
+        }
+
+        // Additional interactive functions
+        function startFreeTrial() {
+            showNotification('🎉 Free trial activated! Welcome to NeuralFlow Pro!');
+        }
+
+        function requestDemo() {
+            showNotification('📅 Enterprise demo scheduled! Check your email for details.');
+        }
+
+        function generateReport() {
+            showNotification('📊 Generating comprehensive analytics report...');
+            setTimeout(() => showNotification('Report ready! 47 pages of insights generated.'), 3000);
+        }
+
+        function showFullTestimonial(person) {
+            const testimonials = {
+                'sarah': 'Dr. Sarah Chen shares how NeuralFlow revolutionized data processing at TechCorp...',
+                'marcus': 'Marcus Rodriguez explains the 300% improvement in trading algorithms...',
+                'emma': 'Prof. Emma Watson discusses breakthrough research using NeuralFlow...',
+                'david': 'David Kim\'s startup journey from inception to IPO with NeuralFlow...',
+                'lisa': 'Dr. Lisa Park reveals how AI improved patient outcomes by 40%...',
+                'alex': 'Alex Thompson\'s experience using NeuralFlow for spacecraft navigation...'
+            };
+            showNotification(testimonials[person] || 'Loading full testimonial...');
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === 'dashboard') {
+                            animateMetrics();
+                        }
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for scroll animations
+            const animatedElements = document.querySelectorAll('.feature-card, .metric, .testimonial');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'all 0.6s ease-out';
+                observer.observe(el);
+            });
+            
+            observer.observe(document.getElementById('dashboard'));
+            
+            // Start metric updates
+            setTimeout(updateMetrics, 3000);
+            
+            // AI input enter key support
+            document.getElementById('aiInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    processAIQuery();
+                }
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const nav = document.querySelector('nav');
+            
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+            
+            if (nav) {
+                const opacity = Math.min(scrolled / 100, 0.9);
+                nav.style.background = `rgba(0, 0, 0, ${opacity})`;
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Additional button functions (placeholder implementations)
+        const buttonFunctions = {
+            showAICapabilities: () => showNotification('🤖 AI Capabilities: NLP, Computer Vision, Predictive Analytics...'),
+            scheduleAIConsultation: () => showNotification('📅 AI consultation scheduled for next Tuesday!'),
+            exportData: () => showNotification('📁 Data exported successfully to CSV format!'),
+            setUpAlerts: () => showNotification('🔔 Alert system configured! You\'ll receive notifications.'),
+            downloadAIGuide: () => showNotification('📖 AI Strategy Guide downloaded! 50 pages of insights.'),
+            joinWebinar: () => showNotification('🎥 Joined upcoming webinar: "AI Trends 2025"'),
+            showAboutModal: () => showNotification('🏢 About: NeuralFlow - Founded by AI researchers from MIT & Stanford'),
+            showCareersModal: () => showNotification('💼 Careers: 23 open positions in AI, ML, and Engineering!'),
+            openHelpCenter: () => showNotification('❓ Help Center opened in new tab!'),
+            startLiveChat: () => showNotification('💬 Live chat initiated! AI assistant Sarah is here to help.'),
+            showGlobalMap: () => showNotification('🗺️ Global Network: 52 data centers across 6 continents'),
+            generatePrediction: () => showNotification('🔮 Prediction: Stock market will rise 3.2% next quarter (87% confidence)'),
+            showIntegrations: () => showNotification('🔌 500+ integrations: Salesforce, HubSpot, AWS, Azure, and more!')
+        };
+
+        // Assign functions to window object
+        Object.assign(window, buttonFunctions);
+    </script>
+</body>
+</html> showNotification('Neural Processing demo loading...')">Try Neural Demo →</button>
+                </div>
+                <div class="feature-card ripple" onclick="showFeatureDemo('speed')">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Quantum-Speed Processing</h3>
+                    <p>Leveraging quantum computing principles to deliver lightning-fast results in microseconds, perfect for high-frequency trading and real-time analytics.</p>
+                    <button class="feature-button" onclick="event.stopPropagation(); runSpeedTest()">Run Speed Test →</button>
+                </div>
+                <div class="feature-card ripple" onclick="showFeatureDemo('security')">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Military-Grade Security</h3>
+                    <p>Advanced encryption protocols and blockchain verification ensure your data remains secure with zero-trust architecture and end-to-end protection.</p>
+                    <button class="feature-button" onclick="event.stopPropagation();
